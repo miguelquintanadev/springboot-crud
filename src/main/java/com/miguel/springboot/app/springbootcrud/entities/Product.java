@@ -1,13 +1,16 @@
 package com.miguel.springboot.app.springbootcrud.entities;
 
+import com.miguel.springboot.app.springbootcrud.validation.IsExistsDb;
+import com.miguel.springboot.app.springbootcrud.validation.IsRequired;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+// import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -17,16 +20,20 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @IsRequired
+    @IsExistsDb
+    private String sku;
     
-    @NotEmpty
+    @IsRequired(message = "{IsRequired.product.name}")
     @Size(min = 3, max = 20)
     private String name;
 
-    @Min(500)
-    @NotNull
+    @Min(value = 500, message = "{Min.product.price}")
+    @NotNull(message = "{NotNull.product.price}")
     private Integer price;
 
-    @NotBlank
+    @IsRequired
     private String description;
 
     public Long getId() {
@@ -52,6 +59,12 @@ public class Product {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public String getSku() {
+        return sku;
+    }
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     
